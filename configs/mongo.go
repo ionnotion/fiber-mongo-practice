@@ -11,7 +11,8 @@ import (
 
 var uri = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
-func ConnectDatabase() {
+
+func ConnectDatabase() *mongo.Client {
 	serverApi := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverApi)
 
@@ -32,4 +33,12 @@ func ConnectDatabase() {
 	}
 
 	fmt.Println("Successfully connected to cluster!")
+	return client
+}
+
+var DB *mongo.Client = ConnectDatabase()
+
+func GetCollection(collectionString string) *mongo.Collection {
+	collection := DB.Database("FiberMongoDB").Collection(collectionString)
+	return collection
 }
